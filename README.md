@@ -15,7 +15,7 @@ Contents
 **&nbsp;&nbsp;&nbsp;** **5. Data:** **&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**  **[`JSON`](#json)**__,__ **[`Pickle`](#pickle)**__,__ **[`CSV`](#csv)**__,__ **[`SQLite`](#sqlite)**__,__ **[`Bytes`](#bytes)**__,__ **[`Struct`](#struct)**__,__ **[`Array`](#array)**__,__ **[`Memory_View`](#memory-view)**__,__ **[`Deque`](#deque)**__.__  
 **&nbsp;&nbsp;&nbsp;** **6. Advanced:** **&nbsp;&nbsp;&nbsp;**  **[`Threading`](#threading)**__,__ **[`Operator`](#operator)**__,__ **[`Introspection`](#introspection)**__,__ **[`Metaprograming`](#metaprograming)**__,__ **[`Eval`](#eval)**__,__ **[`Coroutines`](#coroutines)**__.__  
 **&nbsp;&nbsp;&nbsp;** **7. Libraries:** **&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**  **[`Progress_Bar`](#progress-bar)**__,__ **[`Plot`](#plot)**__,__ **[`Table`](#table)**__,__ **[`Curses`](#curses)**__,__ **[`Logging`](#logging)**__,__ **[`Scraping`](#scraping)**__,__ **[`Web`](#web)**__,__ **[`Profile`](#profiling)**__,__  
-**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** **[`NumPy`](#numpy)**__,__ **[`Image`](#image)**__,__ **[`Audio`](#audio)**__,__ **[`Pygame`](#pygame)**__.__
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** **[`NumPy`](#numpy)**__,__ **[`Image`](#image)**__,__ **[`Audio`](#audio)**__,__ **[`Games`](#pygame)**__,__ **[`Data`](#pandas)**__,__ **[`Cython`](#cython)**__.__
 
 
 Main
@@ -215,8 +215,8 @@ from itertools import count, repeat, cycle, chain, islice
 ```
 
 ```python
-<iter> = islice(<collection>, to_exclusive)
-<iter> = islice(<collection>, from_inclusive, to_exclusive [, +step_size])
+<iter> = islice(<coll>, to_exclusive)       # Only returns first 'to_exclusive' elements.
+<iter> = islice(<coll>, from_inclusive, …)  # `to_exclusive, step_size`.
 ```
 
 
@@ -520,19 +520,19 @@ shuffle(<list>)
 
 ### Bin, Hex
 ```python
-<int>        = 0b<bin>                   # Or: 0x<hex>
-<int>        = int('±<bin>', 2)          # Or: int('±<hex>', 16)
-<int>        = int('±0b<bin>', 0)        # Or: int('±0x<hex>', 0)
-'[-]0b<bin>' = bin(<int>)                # Or: hex(<int>)
+<int> = ±0b<bin>                         # Or: ±0x<hex>
+<int> = int('±<bin>', 2)                 # Or: int('±<hex>', 16)
+<int> = int('±0b<bin>', 0)               # Or: int('±0x<hex>', 0)
+<str> = bin(<int>)                       # Returns '[-]0b<bin>'.
 ```
 
 ### Bitwise Operators
 ```python
-<int>        = <int> & <int>             # And
-<int>        = <int> | <int>             # Or
-<int>        = <int> ^ <int>             # Xor (0 if both bits equal)
-<int>        = <int> << n_bits           # Shift left (>> for right)
-<int>        = ~<int>                    # Not (also: -<int> - 1)
+<int> = <int> & <int>                    # And
+<int> = <int> | <int>                    # Or
+<int> = <int> ^ <int>                    # Xor (0 if both bits equal)
+<int> = <int> << n_bits                  # Shift left (>> for right)
+<int> = ~<int>                           # Not (also: -<int> - 1)
 ```
 
 
@@ -547,34 +547,34 @@ from itertools import product, combinations, combinations_with_replacement, perm
 
 ```python
 >>> product([0, 1], repeat=3)
-[(0, 0, 0), (0, 0, 1), (0, 1, 0), (0, 1, 1),
- (1, 0, 0), (1, 0, 1), (1, 1, 0), (1, 1, 1)]
+[(0, 0, 0), (0, 0, 1), (0, 1, 0), (0, 1, 1), ..., (1, 1, 1)]
 ```
 
 ```python
->>> product('ab', '12')
-[('a', '1'), ('a', '2'),
- ('b', '1'), ('b', '2')]
+>>> product('abc', 'abc')                    #   a  b  c
+[('a', 'a'), ('a', 'b'), ('a', 'c'),         # a x  x  x
+ ('b', 'a'), ('b', 'b'), ('b', 'c'),         # b x  x  x
+ ('c', 'a'), ('c', 'b'), ('c', 'c')]         # c x  x  x
 ```
 
 ```python
->>> combinations('abc', 2)
-[('a', 'b'), ('a', 'c'),
- ('b', 'c')]
+>>> combinations('abc', 2)                   #   a  b  c
+[('a', 'b'), ('a', 'c'),                     # a .  x  x
+ ('b', 'c')]                                 # b .  .  x
 ```
 
 ```python
->>> combinations_with_replacement('abc', 2)
-[('a', 'a'), ('a', 'b'), ('a', 'c'),
- ('b', 'b'), ('b', 'c'),
- ('c', 'c')]
+>>> combinations_with_replacement('abc', 2)  #   a  b  c
+[('a', 'a'), ('a', 'b'), ('a', 'c'),         # a x  x  x
+ ('b', 'b'), ('b', 'c'),                     # b .  x  x
+ ('c', 'c')]                                 # c .  .  x
 ```
 
 ```python
->>> permutations('abc', 2)
-[('a', 'b'), ('a', 'c'),
- ('b', 'a'), ('b', 'c'),
- ('c', 'a'), ('c', 'b')]
+>>> permutations('abc', 2)                   #   a  b  c
+[('a', 'b'), ('a', 'c'),                     # a .  x  x
+ ('b', 'a'), ('b', 'c'),                     # b x  .  x
+ ('c', 'a'), ('c', 'b')]                     # c x  x  .
 ```
 
 
@@ -750,7 +750,7 @@ Inline
 <function> = lambda <argument_1>, <argument_2>: <return_value>
 ```
 
-### Comprehension
+### Comprehensions
 ```python
 <list> = [i+1 for i in range(10)]                   # [1, 2, ..., 10]
 <set>  = {i for i in range(10) if i > 5}            # {6, 7, 8, 9}
@@ -1035,7 +1035,8 @@ class <class_name>:
     <attr_name_2>: <type> = <default_value>
     <attr_name_3>: list/dict/set = field(default_factory=list/dict/set)
 ```
-* **Objects can be made sortable with `'order=True'` and/or immutable and hashable with `'frozen=True'`.**
+* **Objects can be made sortable with `'order=True'` and immutable with `'frozen=True'`.**
+* **For object to be hashable, all attributes must be hashable and frozen must be True.**
 * **Function field() is needed because `'<attr_name>: list = []'` would make a list that is shared among all instances.**
 * **Default_factory can be any [callable](#callable).**
 
@@ -1147,7 +1148,7 @@ class Counter:
 #### Python has many different iterator objects:
 * **Iterators returned by the [iter()](#iterator) function, such as list\_iterator and set\_iterator.**
 * **Objects returned by the [itertools](#itertools) module, such as count, repeat and cycle.**
-* **Generators returned by the [generator functions](#generator) and [generator expressions](#comprehension).**
+* **Generators returned by the [generator functions](#generator) and [generator expressions](#comprehensions).**
 * **File objects returned by the [open()](#open) function, etc.**
 
 ### Callable
@@ -1363,13 +1364,15 @@ else:
 finally:
     <code_3>
 ```
+* **Code inside the `'else'` block will only be executed if `'try'` block had no exception.**
+* **Code inside the `'finally'` block will always be executed.**
 
 ### Catching Exceptions
 ```python
 except <exception>:
 except <exception> as <name>:
-except (<exception>, ...):
-except (<exception>, ...) as <name>:
+except (<exception>, [...]):
+except (<exception>, [...]) as <name>:
 ```
 * **Also catches subclasses of the exception.**
 * **Use `'traceback.print_exc()'` to print the error message to stderr.**
@@ -1839,7 +1842,7 @@ SQLite
 ```python
 import sqlite3
 <con> = sqlite3.connect('<path>')               # Also ':memory:'.
-<con>.close()
+<con>.close()                                   # Closes the connection.
 ```
 
 ### Read
@@ -1868,7 +1871,7 @@ with <con>:
 ```python
 <con>.execute('<query>', <list/tuple>)          # Replaces '?'s in query with values.
 <con>.execute('<query>', <dict/namedtuple>)     # Replaces ':<key>'s with values.
-<con>.executemany('<query>', <coll_of_above>)   # Runs execute() many times.
+<con>.executemany('<query>', <coll_of_above>)   # Runs execute() multiple times.
 ```
 
 ### Example
@@ -1912,7 +1915,7 @@ Bytes
 <bytes> = bytes(<coll_of_ints>)          # Ints must be in range from 0 to 255.
 <bytes> = bytes(<str>, 'utf-8')          # Or: <str>.encode('utf-8')
 <bytes> = <int>.to_bytes(n_bytes, …)     # `byteorder='big/little', signed=False`.
-<bytes> = bytes.fromhex('<hex>')         # Hex numbers can be separated by spaces.
+<bytes> = bytes.fromhex('<hex>')         # Hex pairs can be separated by spaces.
 ```
 
 ### Decode
@@ -1920,7 +1923,7 @@ Bytes
 <list>  = list(<bytes>)                  # Returns ints in range from 0 to 255.
 <str>   = str(<bytes>, 'utf-8')          # Or: <bytes>.decode('utf-8')
 <int>   = int.from_bytes(<bytes>, …)     # `byteorder='big/little', signed=False`.
-'<hex>' = <bytes>.hex()                  # Returns a string of hexadecimal numbers.
+'<hex>' = <bytes>.hex()                  # Returns a string of hexadecimal pairs.
 ```
 
 ### Read Bytes from File
@@ -1960,26 +1963,26 @@ b'\x00\x01\x00\x02\x00\x00\x00\x03'
 
 ### Format
 #### For standard type sizes start format string with:
-* **`'='` - native byte order**
+* **`'='` - native byte order (usually little-endian)**
 * **`'<'` - little-endian**
 * **`'>'` - big-endian (also `'!'`)**
 
-#### Integer types. Use a capital letter for unsigned type. Standard sizes are in brackets:
+#### Integer types. Use a capital letter for unsigned type. Minimum and standard sizes are in brackets:
 * **`'x'` - pad byte**
-* **`'b'` - char (1)**
-* **`'h'` - short (2)**
-* **`'i'` - int (4)**
-* **`'l'` - long (4)**
-* **`'q'` - long long (8)**
+* **`'b'` - char (1/1)**
+* **`'h'` - short (2/2)**
+* **`'i'` - int (2/4)**
+* **`'l'` - long (4/4)**
+* **`'q'` - long long (8/8)**
 
 #### Floating point types:
-* **`'f'` - float (4)**
-* **`'d'` - double (8)**
+* **`'f'` - float (4/4)**
+* **`'d'` - double (8/8)**
 
 
 Array
 -----
-**List that can only hold numbers of a predefined type. Available types and their sizes in bytes are listed above.**
+**List that can only hold numbers of a predefined type. Available types and their minimum sizes in bytes are listed above. Sizes and byte order are always determined by the system.**
 
 ```python
 from array import array
@@ -2304,9 +2307,9 @@ async def human_controller(screen, moves):
 async def model(moves, state, height, width):
     while state['*'] not in {p for id_, p in state.items() if id_ != '*'}:
         id_, d = await moves.get()
-        p      = state[id_]
+        p = state[id_]
         deltas = {D.n: P(0, -1), D.e: P(1, 0), D.s: P(0, 1), D.w: P(-1, 0)}
-        new_p  = P(*[sum(a) for a in zip(p, deltas[d])])
+        new_p = P(p.x + deltas[d].x, p.y + deltas[d].y)
         if 0 <= new_p.x < width-1 and 0 <= new_p.y < height:
             state[id_] = new_p
 
@@ -2439,7 +2442,7 @@ retention=<int>|<datetime.timedelta>|<str>
 
 Scraping
 --------
-#### Scrapes Python's URL, version number and logo from Wikipedia page:
+#### Scrapes Python's URL, version number and logo from its Wikipedia page:
 ```python
 # $ pip3 install requests beautifulsoup4
 import requests, sys
@@ -2534,7 +2537,7 @@ duration = perf_counter() - start_time
 ### Timing a Snippet
 ```python
 >>> from timeit import timeit
->>> timeit('"-".join(str(a) for a in range(100))',
+>>> timeit('"-".join(str(i) for i in range(100))',
 ...        number=10000, globals=globals(), setup='pass')
 0.34986
 ```
@@ -2585,7 +2588,7 @@ with PyCallGraph(drawer):
 
 NumPy
 -----
-**Array manipulation mini-language. It can run up to one hundred times faster than the equivalent Python code.**
+**Array manipulation mini-language. It can run up to one hundred times faster than the equivalent Python code. An even faster alternative that runs on a GPU is called CuPy.**
 
 ```python
 # $ pip3 install numpy
@@ -2701,16 +2704,16 @@ from PIL import Image
 ```
 
 ```python
-<tuple/int> = <Image>.getpixel((x, y))          # Returns a pixel.
-<Image>.putpixel((x, y), <tuple/int>)           # Writes a pixel to the image.
+<int/tuple> = <Image>.getpixel((x, y))          # Returns a pixel.
+<Image>.putpixel((x, y), <int/tuple>)           # Writes a pixel to the image.
 <ImagingCore> = <Image>.getdata()               # Returns a sequence of pixels.
 <Image>.putdata(<list/ImagingCore>)             # Writes a sequence of pixels.
 <Image>.paste(<Image>, (x, y))                  # Writes an image to the image.
 ```
 
 ```bash
-<2d_array> = np.array(<Image>)                  # Creates NumPy array from greyscale image.
-<3d_array> = np.array(<Image>)                  # Creates NumPy array from color image.
+<2d_array> = np.array(<Image_L>)                # Creates NumPy array from greyscale image.
+<3d_array> = np.array(<Image_RGB>)              # Creates NumPy array from color image.
 <Image>    = Image.fromarray(<array>)           # Creates image from NumPy array of floats.
 ```
 
@@ -2825,14 +2828,14 @@ nframes      = <Wave_read>.getnframes()         # Number of frames.
 ### Read Float Samples from WAV File
 ```python
 def read_wav_file(filename):
-    def get_int(a_bytes):
-        an_int = int.from_bytes(a_bytes, 'little', signed=width!=1)
-        return an_int - 128 * (width == 1)
+    def get_int(bytes_obj):
+        an_int = int.from_bytes(bytes_obj, 'little', signed=sampwidth!=1)
+        return an_int - 128 * (sampwidth == 1)
     with wave.open(filename, 'rb') as file:
-        width  = file.getsampwidth()
-        frames = file.readframes(file.getnframes())
-    byte_samples = (frames[i: i + width] for i in range(0, len(frames), width))
-    return [get_int(b) / pow(2, width * 8 - 1) for b in byte_samples]
+        sampwidth = file.getsampwidth()
+        frames = file.readframes(-1)
+    bytes_samples = (frames[i: i + sampwidth] for i in range(0, len(frames), sampwidth))
+    return [get_int(b) / pow(2, sampwidth * 8 - 1) for b in bytes_samples]
 ```
 
 ### Write Float Samples to WAV File
@@ -2872,7 +2875,7 @@ write_to_wav_file('test.wav', samples_f)
 from simpleaudio import play_buffer
 with wave.open('test.wav', 'rb') as file:
     p = file.getparams()
-    frames = file.readframes(p.nframes)
+    frames = file.readframes(-1)
     play_buffer(frames, p.nchannels, p.sampwidth, p.framerate)
 ```
 
@@ -2920,8 +2923,8 @@ screen = pg.display.set_mode((500, 500))
 rect = pg.Rect(240, 240, 20, 20)
 while all(event.type != pg.QUIT for event in pg.event.get()):
     deltas = {pg.K_UP: (0, -3), pg.K_RIGHT: (3, 0), pg.K_DOWN: (0, 3), pg.K_LEFT: (-3, 0)}
-    for delta in (deltas.get(i) for i, on in enumerate(pg.key.get_pressed()) if on):
-        rect = rect.move(delta) if delta else rect
+    for key_code, is_pressed in enumerate(pg.key.get_pressed()):
+        rect = rect.move(deltas[key_code]) if key_code in deltas and is_pressed else rect
     screen.fill((0, 0, 0))
     pg.draw.rect(screen, (255, 255, 255), rect)
     pg.display.flip()
@@ -2937,7 +2940,7 @@ while all(event.type != pg.QUIT for event in pg.event.get()):
 ```
 
 ```python
-<bool> = <Rect>.collidepoint((x, y))            # Tests if a point is inside a rectangle.
+<bool> = <Rect>.collidepoint((x, y))            # Tests if a point is inside the rectangle.
 <bool> = <Rect>.colliderect(<Rect>)             # Tests if two rectangles overlap.
 <int>  = <Rect>.collidelist(<list_of_Rect>)     # Returns index of first colliding Rect or -1.
 <list> = <Rect>.collidelistall(<list_of_Rect>)  # Returns indexes of all colliding Rects.
@@ -2976,7 +2979,7 @@ pg.draw.ellipse(<Surf>, color, <Rect>)
 ```python
 <Font> = pg.font.SysFont('<name>', size, bold=False, italic=False)
 <Font> = pg.font.Font('<path>', size)
-<Surf> = <Font>.render(text, antialias, color, background=None)
+<Surf> = <Font>.render(text, antialias, color [, background])
 ```
 
 ### Sound
@@ -3027,7 +3030,7 @@ def update_speed(mario, tiles, pressed):
     x, y = mario.spd
     x += 2 * ((D.e in pressed) - (D.w in pressed))
     x -= x // abs(x) if x else 0
-    y += 1 if D.s not in get_boundaries(mario.rect, tiles) else (-10 if D.n in pressed else 0)
+    y += 1 if D.s not in get_boundaries(mario.rect, tiles) else (D.n in pressed) * -10
     mario.spd = P(*[max(-limit, min(limit, s)) for limit, s in zip(MAX_SPEED, P(x, y))])
 
 def update_position(mario, tiles):
@@ -3063,8 +3066,413 @@ if __name__ == '__main__':
 ```
 
 
-Basic Script Template
----------------------
+Pandas
+------
+
+```python
+# $ pip3 install pandas
+import pandas as pd
+from pandas import Series, DataFrame
+```
+
+### Series
+**Ordered dictionary with a name.**
+
+```python
+>>> Series([1, 2], index=['x', 'y'], name='a')
+x    1
+y    2
+Name: a, dtype: int64
+```
+
+```python
+<Sr> = Series(<list>)                         # Assigns RangeIndex starting at 0.
+<Sr> = Series(<dict>)                         # Takes dictionary's keys for index.
+<Sr> = Series(<dict/Series>, index=<list>)    # Only keeps items with keys specified in index.
+```
+
+```python
+<el> = <Sr>.loc[key]                          # Or: <Sr>.iloc[index]
+<Sr> = <Sr>.loc[keys]                         # Or: <Sr>.iloc[indexes]
+<Sr> = <Sr>.loc[from_key : to_key_inclusive]  # Or: <Sr>.iloc[from_i : to_i_exclusive]
+```
+
+```python
+<el> = <Sr>[key/index]                        # Or: <Sr>.key
+<Sr> = <Sr>[keys/indexes]                     # Or: <Sr>[<key_range/range>]
+<Sr> = <Sr>[bools]                            # Or: <Sr>.i/loc[bools]
+```
+
+```python
+<Sr> = <Sr> ><== <el/Sr>                      # Returns a Series of bools.
+<Sr> = <Sr> +-*/ <el/Sr>                      # Non-matching keys get value NaN.
+```
+
+```python
+<Sr> = <Sr>.append(<Sr>)                      # Or: pd.concat(<coll_of_Sr>)
+<Sr> = <Sr>.combine_first(<Sr>)               # Adds items that are not yet present.
+<Sr>.update(<Sr>)                             # Updates items that are already present.
+```
+
+#### Aggregate, Transform, Map:
+```python
+<el> = <Sr>.sum/max/mean/idxmax/all()         # Or: <Sr>.aggregate(<agg_func>)
+<Sr> = <Sr>.rank/diff/cumsum/ffill/interpl()  # Or: <Sr>.agg/transform(<trans_func>)
+<Sr> = <Sr>.fillna(<el>)                      # Or: <Sr>.apply/agg/transform/map(<map_func>)
+```
+* **The way `'aggregate()'` and `'transform()'` find out whether the passed function accepts an element or the whole Series is by passing it a single value at first and if it raises an error, then they pass it the whole Series.**
+
+```python
+>>> sr = Series([1, 2], index=['x', 'y'])
+x    1
+y    2
+```
+
+```text
++-------------+-------------+-------------+---------------+
+|             |    'sum'    |   ['sum']   | {'s': 'sum'}  |
++-------------+-------------+-------------+---------------+
+| sr.apply(…) |      3      |    sum  3   |     s  3      |
+| sr.agg(…)   |             |             |               |
++-------------+-------------+-------------+---------------+
+```
+
+```text
++-------------+-------------+-------------+---------------+
+|             |    'rank'   |   ['rank']  | {'r': 'rank'} |
++-------------+-------------+-------------+---------------+
+| sr.apply(…) |             |      rank   |               |
+| sr.agg(…)   |     x  1    |   x     1   |    r  x  1    |
+| sr.trans(…) |     y  2    |   y     2   |       y  2    |
++-------------+-------------+-------------+---------------+
+```
+* **Last result has a hierarchical index. Use `'<Sr>[key_1, key_2]'` to get its values.**
+
+### DataFrame
+**Table with labeled rows and columns.**
+
+```python
+>>> DataFrame([[1, 2], [3, 4]], index=['a', 'b'], columns=['x', 'y'])
+   x  y
+a  1  2
+b  3  4
+```
+
+```python
+<DF>    = DataFrame(<list_of_rows>)           # Rows can be either lists, dicts or series.
+<DF>    = DataFrame(<dict_of_columns>)        # Columns can be either lists, dicts or series.
+```
+
+```python
+<el>    = <DF>.loc[row_key, column_key]       # Or: <DF>.iloc[row_index, column_index]
+<Sr/DF> = <DF>.loc[row_key/s]                 # Or: <DF>.iloc[row_index/es]
+<Sr/DF> = <DF>.loc[:, column_key/s]           # Or: <DF>.iloc[:, column_index/es]
+<DF>    = <DF>.loc[row_bools, column_bools]   # Or: <DF>.iloc[row_bools, column_bools]
+```
+
+```python
+<Sr/DF> = <DF>[column_key/s]                  # Or: <DF>.column_key
+<DF>    = <DF>[row_bools]                     # Keeps rows as specified by bools.
+<DF>    = <DF>[<DF_of_bools>]                 # Assigns NaN to False values.
+```
+
+```python
+<DF>    = <DF> ><== <el/Sr/DF>                # Returns DataFrame of bools.
+<DF>    = <DF> +-*/ <el/Sr/DF>                # Non-matching keys get value NaN.
+```
+
+```python
+<DF>    = <DF>.set_index(column_key)          # Replaces row keys with values from a column.
+<DF>    = <DF>.reset_index()                  # Moves row keys to their own column.
+<DF>    = <DF>.filter('<regex>', axis=1)      # Only keeps columns whose key matches the regex.
+<DF>    = <DF>.melt(id_vars=column_key/s)     # Converts DF from wide to long format.
+```
+
+#### Merge, Join, Concat:
+```python
+>>> l = DataFrame([[1, 2], [3, 4]], index=['a', 'b'], columns=['x', 'y'])
+   x  y 
+a  1  2 
+b  3  4 
+>>> r = DataFrame([[4, 5], [6, 7]], index=['b', 'c'], columns=['y', 'z'])
+   y  z
+b  4  5
+c  6  7
+```
+
+```text
++------------------------+---------------+------------+------------+--------------------------+
+|                        |    'outer'    |   'inner'  |   'left'   |       Description        |
++------------------------+---------------+------------+------------+--------------------------+
+| l.merge(r, on='y',     |    x   y   z  | x   y   z  | x   y   z  | Joins/merges on column.  |
+|            how=…)      | 0  1   2   .  | 3   4   5  | 1   2   .  | Also accepts left_on and |
+|                        | 1  3   4   5  |            | 3   4   5  | right_on parameters.     |
+|                        | 2  .   6   7  |            |            | Uses 'inner' by default. |
++------------------------+---------------+------------+------------+--------------------------+
+| l.join(r, lsuffix='l', |    x yl yr  z |            | x yl yr  z | Joins/merges on row keys.|
+|           rsuffix='r', | a  1  2  .  . | x yl yr  z | 1  2  .  . | Uses 'left' by default.  |
+|           how=…)       | b  3  4  4  5 | 3  4  4  5 | 3  4  4  5 |                          |
+|                        | c  .  .  6  7 |            |            |                          |
++------------------------+---------------+------------+------------+--------------------------+
+| pd.concat([l, r],      |    x   y   z  |     y      |            | Adds rows at the bottom. |
+|           axis=0,      | a  1   2   .  |     2      |            | Uses 'outer' by default. |
+|           join=…)      | b  3   4   .  |     4      |            | By default works the     |
+|                        | b  .   4   5  |     4      |            | same as `l.append(r)`.   |
+|                        | c  .   6   7  |     6      |            |                          |
++------------------------+---------------+------------+------------+--------------------------+
+| pd.concat([l, r],      |    x  y  y  z |            |            | Adds columns at the      |
+|           axis=1,      | a  1  2  .  . | x  y  y  z |            | right end.               |
+|           join=…)      | b  3  4  4  5 | 3  4  4  5 |            | Uses 'outer' by default. |
+|                        | c  .  .  6  7 |            |            |                          |
++------------------------+---------------+------------+------------+--------------------------+
+| l.combine_first(r)     |    x   y   z  |            |            | Adds missing rows and    |
+|                        | a  1   2   .  |            |            | columns.                 |
+|                        | b  3   4   5  |            |            |                          |
+|                        | c  .   6   7  |            |            |                          |
++------------------------+---------------+------------+------------+--------------------------+
+```
+
+#### Aggregate, Transform, Map:
+```python
+<Sr> = <DF>.sum/max/mean/idxmax/all()         # Or: <DF>.apply/agg/transform(<agg_func>)
+<DF> = <DF>.rank/diff/cumsum/ffill/interpl()  # Or: <DF>.apply/agg/transform(<trans_func>)
+<DF> = <DF>.fillna(<el>)                      # Or: <DF>.applymap(<map_func>)
+```
+* **All operations operate on columns by default. Use `'axis=1'` parameter to process the rows instead.** 
+
+```python
+>>> df = DataFrame([[1, 2], [3, 4]], index=['a', 'b'], columns=['x', 'y'])
+   x  y
+a  1  2
+b  3  4
+```
+
+```text
++-------------+-------------+-------------+---------------+
+|             |    'sum'    |   ['sum']   | {'x': 'sum'}  |
++-------------+-------------+-------------+---------------+
+| df.apply(…) |             |       x  y  |               |
+| df.agg(…)   |     x  4    |  sum  4  6  |     x  4      |
+|             |     y  6    |             |               |
++-------------+-------------+-------------+---------------+
+```
+
+```text
++-------------+-------------+-------------+---------------+
+|             |    'rank'   |   ['rank']  | {'x': 'rank'} |
++-------------+-------------+-------------+---------------+
+| df.apply(…) |      x  y   |      x    y |        x      |
+| df.agg(…)   |   a  1  1   |   rank rank |     a  1      |
+| df.trans(…) |   b  2  2   | a    1    1 |     b  2      |
+|             |             | b    2    2 |               |
++-------------+-------------+-------------+---------------+
+```
+* **Use `'<DF>[col_key_1, col_key_2][row_key]'` to get the fifth result's values.**
+
+#### Encode, Decode:
+```python
+<DF> = pd.read_json/html('<str/path/url>')
+<DF> = pd.read_csv/pickle/excel('<path/url>')
+<DF> = pd.read_sql('<query>', <connection>)
+<DF> = pd.read_clipboard()
+```
+
+```python
+<dict> = <DF>.to_dict(['d/l/s/sp/r/i'])
+<str>  = <DF>.to_json/html/csv/markdown/latex([<path>])
+<DF>.to_pickle/excel(<path>)
+<DF>.to_sql('<table_name>', <connection>)
+```
+
+### GroupBy
+**Object that groups together rows of a dataframe based on the value of the passed column.**
+
+```python
+>>> df = DataFrame([[1, 2, 3], [4, 5, 6], [7, 8, 6]], index=list('abc'), columns=list('xyz'))
+>>> df.groupby('z').get_group(3)
+   x  y
+a  1  2
+>>> df.groupby('z').get_group(6)
+   x  y
+b  4  5
+c  7  8
+```
+
+```python
+<GB> = <DF>.groupby(column_key/s)             # DF is split into groups based on passed column.
+<DF> = <GB>.get_group(group_key)              # Selects a group by value of grouping column.
+```
+
+#### Aggregate, Transform, Map:
+```python
+<DF> = <GB>.sum/max/mean/idxmax/all()         # Or: <GB>.apply/agg(<agg_func>)
+<DF> = <GB>.rank/diff/cumsum/ffill()          # Or: <GB>.aggregate(<trans_func>)  
+<DF> = <GB>.fillna(<el>)                      # Or: <GB>.transform(<map_func>)
+```
+
+```python
+>>> gb = df.groupby('z')
+      x  y  z
+3: a  1  2  3
+6: b  4  5  6
+   c  7  8  6
+```
+
+```text
++-------------+-------------+-------------+-------------+---------------+
+|             |    'sum'    |    'rank'   |   ['rank']  | {'x': 'rank'} |
++-------------+-------------+-------------+-------------+---------------+
+| gb.agg(…)   |      x   y  |      x  y   |      x    y |        x      |
+|             |  z          |   a  1  1   |   rank rank |     a  1      |
+|             |  3   1   2  |   b  1  1   | a    1    1 |     b  1      |
+|             |  6  11  13  |   c  2  2   | b    1    1 |     c  2      |
+|             |             |             | c    2    2 |               |
++-------------+-------------+-------------+-------------+---------------+
+| gb.trans(…) |      x   y  |      x  y   |             |               |
+|             |  a   1   2  |   a  1  1   |             |               |
+|             |  b  11  13  |   b  1  1   |             |               |
+|             |  c  11  13  |   c  1  1   |             |               |
++-------------+-------------+-------------+-------------+---------------+
+```
+
+### Rolling
+**Object for rolling window calculations.**
+
+```python
+<R_Sr/R_DF/R_GB> = <Sr/DF/GB>.rolling(window_size)  # Also: `min_periods=None, center=False`.
+<R_Sr/R_DF>      = <R_DF/R_GB>[column_key/s]        # Or: <R>.column_key
+<Sr/DF/DF>       = <R_Sr/R_DF/R_GB>.sum/max/mean()  # Or: <R>.apply/agg(<agg_func/str>)
+```
+
+
+Plotly
+------
+
+### Covid Deaths by Continent
+
+![Covid Deaths](web/covid_deaths.png)
+<div id="2a950764-39fc-416d-97fe-0a6226a3095f" class="plotly-graph-div" style="height:400px; width:100%;"></div>
+
+```python
+# $ pip3 install pandas plotly
+import pandas as pd
+import plotly.express
+
+covid = pd.read_csv('https://covid.ourworldindata.org/data/owid-covid-data.csv', 
+                    usecols=['iso_code', 'date', 'total_deaths', 'population'])
+continents = pd.read_csv('https://datahub.io/JohnSnowLabs/country-and-continent-codes-' + \
+                         'list/r/country-and-continent-codes-list-csv.csv',
+                         usecols=['Three_Letter_Country_Code', 'Continent_Name'])
+df = pd.merge(covid, continents, left_on='iso_code', right_on='Three_Letter_Country_Code')
+df = df.groupby(['Continent_Name', 'date']).sum().reset_index()
+df['Total Deaths per Million'] = df.total_deaths * 1e6 / df.population
+df = df[('2020-03-14' < df.date) & (df.date < '2020-06-25')]
+df = df.rename({'date': 'Date', 'Continent_Name': 'Continent'}, axis='columns')
+plotly.express.line(df, x='Date', y='Total Deaths per Million', color='Continent').show()
+```
+
+### Confirmed Covid Cases, Dow Jones, Gold, and Bitcoin Price
+
+![Covid Cases](web/covid_cases.png)
+<div id="e23ccacc-a456-478b-b467-7282a2165921" class="plotly-graph-div" style="height:400px; width:100%;"></div>
+
+```python
+# $ pip3 install pandas plotly
+import pandas as pd
+import plotly.graph_objects as go
+import datetime
+
+def main():
+    data = scrape_data()
+    df = wrangle_data(*data)
+    display_data(df)
+
+def scrape_data():
+    def scrape_yahoo(id_):
+        BASE_URL = 'https://query1.finance.yahoo.com/v7/finance/download/'
+        now = int(datetime.datetime.now().timestamp())
+        url = f'{BASE_URL}{id_}?period1=1579651200&period2={now}&interval=1d&events=history'
+        return pd.read_csv(url, usecols=['Date', 'Close']).set_index('Date').Close
+    covid = pd.read_csv('https://covid.ourworldindata.org/data/owid-covid-data.csv',
+                        usecols=['date', 'total_cases'])
+    covid = covid.groupby('date').sum()
+    dow, gold, bitcoin = [scrape_yahoo(id_) for id_ in ('^DJI', 'GC=F', 'BTC-USD')]
+    dow.name, gold.name, bitcoin.name = 'Dow Jones', 'Gold', 'Bitcoin'
+    return covid, dow, gold, bitcoin
+
+def wrangle_data(covid, dow, gold, bitcoin):
+    df = pd.concat([dow, gold, bitcoin], axis=1)
+    df = df.sort_index().interpolate()
+    df = df.rolling(10, min_periods=1, center=True).mean()
+    df = df.loc['2020-02-23':].iloc[:-2]
+    df = (df / df.iloc[0]) * 100
+    return pd.concat([covid, df], axis=1, join='inner')
+
+def display_data(df):
+    def get_trace(col_name):
+        return go.Scatter(x=df.index, y=df[col_name], name=col_name, yaxis='y2')
+    traces = [get_trace(col_name) for col_name in df.columns[1:]]
+    traces.append(go.Scatter(x=df.index, y=df.total_cases, name='Total Cases', yaxis='y1'))
+    figure = go.Figure()
+    figure.add_traces(traces)
+    figure.update_layout(
+        yaxis1=dict(title='Total Cases', rangemode='tozero'),
+        yaxis2=dict(title='%', rangemode='tozero', overlaying='y', side='right'),
+        legend=dict(x=1.1)
+    ).show()
+
+if __name__ == '__main__':
+    main()
+```
+
+
+Cython
+------
+**Library that compiles Python code into C.**
+
+```python
+# $ pip3 install cython
+import pyximport; pyximport.install()
+import <cython_script>
+<cython_script>.main()
+```
+
+### Definitions
+* **All `'cdef'` definitions are optional, but they contribute to the speed-up.**
+* **Script needs to be saved with a `'pyx'` extension.**
+
+```python
+cdef <type> <var_name> = <el>
+cdef <type>[n_elements] <var_name> = [<el_1>, <el_2>, ...]
+cdef <type/void> <func_name>(<type> <arg_name_1>, ...):
+```
+
+```python
+cdef class <class_name>:
+    cdef public <type> <attr_name>
+    def __init__(self, <type> <arg_name>):
+        self.<attr_name> = <arg_name>
+```
+
+```python
+cdef enum <enum_name>: <member_name_1>, <member_name_2>, ...
+```
+
+
+Appendix
+--------
+
+### PyInstaller
+```bash
+$ pip3 install pyinstaller
+$ pyinstaller script.py                        # Compiles into './dist/script' directory.
+$ pyinstaller script.py --onefile              # Compiles into './dist/script' console app.
+$ pyinstaller script.py --windowed             # Compiles into './dist/script' windowed app.
+$ pyinstaller script.py --add-data '<path>:.'  # Adds file to the root of the executable.
+```
+* **File paths need to be updated to `'os.path.join(sys._MEIPASS, <path>)'`.**
+
+### Basic Script Template
 ```python
 #!/usr/bin/env python3
 #
@@ -3074,7 +3482,7 @@ Basic Script Template
 from collections import namedtuple
 from dataclasses import make_dataclass
 from enum import Enum
-from sys import argv
+from sys import argv, exit
 import re
 
 
@@ -3093,5 +3501,4 @@ def read_file(filename):
 
 if __name__ == '__main__':
     main()
-
 ```
